@@ -10,18 +10,24 @@ class Contractor(View):
         return super(Contractor, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-
         contractor_list = list(Contractor.objects.value())
         return JsonResponse({
         'Content-Type': 'application/json',
         'status': 200,
         'data': contractor_list
         }, safe=False)
+    print(Contractor)
+    
     
 class Contractor_detail(View):
     def dispatch(self, request, *args, **kwargs):
         return super(Contractor, self).dispatch(request, *args, **kwargs)
 
+
+    def get(self, request, pk):
+        contractor_list = list(Contractor.objects.filter(pk=pk).values())
+        return JsonResponse({"data": contractor}, safe=False)
+    
     def post(self, request):
         data: request.decode.body('utf-8')
         print(data)
