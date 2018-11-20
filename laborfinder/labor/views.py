@@ -5,11 +5,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
 
-class Contractor(View):
+class Contractors(View):
 # Create your views here.
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(Contractor, self).dispatch(request, *args, **kwargs)
+        return super(Contractors, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
         contractor_list = list(Contractor.objects.value())
@@ -23,13 +23,14 @@ class Contractor(View):
         data = request.body.decode('utf-8')
         print(data)
         data = json.loads(data)
-        new_contractor = Contractor(name=data["name"], description=data["description"], budget=data["budget"], job_start_time=data["job_start_time"] )
+        try:
+            new_contractor = Contractor(name=data["name"], description=data["description"], budget=data["budget"], job_start_time=data["job_start_time"] )
         
-        new_contractor.save()
-        print('this is a new contractor', new_contractor.id)
-        return JsonResponse({"created": data}, safe=False)
-    except: 
-        return JsonResponse({"error": "not valid data"}, safe=False)
+            new_contractor.save()
+            print('this is a new contractor', new_contractor.id)
+            return JsonResponse({"created": data}, safe=False)
+        except:
+            return JsonResponse({"error": "not valid data"}, safe=False)
     
     
 class Contractor_detail(View):
@@ -41,7 +42,7 @@ class Contractor_detail(View):
 
     def get(self, request, pk):
         contractor_list = list(Contractor.objects.filter(pk=pk).values())
-        return JsonResponse({"data": contractor}, safe=False)
+        return JsonResponse({"data": contractor_list}, safe=False)
     
     def post(self, request):
         data: request.decode.body('utf-8')
