@@ -12,7 +12,7 @@ class Contractors(View):
         return super(Contractors, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        contractor_list = list(Contractor.objects.value())
+        contractor_list = list(Contractor.objects.values())
         return JsonResponse({
         'Content-Type': 'application/json',
         'status': 200,
